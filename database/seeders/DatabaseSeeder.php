@@ -4,7 +4,10 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use CitySeeder;
+use CountrySeeder;
 use Illuminate\Database\Seeder;
+use StateSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        
+        
     }
 }

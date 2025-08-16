@@ -5,7 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DeparmtmentResource\Pages;
 use App\Filament\Resources\DeparmtmentResource\RelationManagers;
 use App\Models\Deparmtment;
+use Dom\Text;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -28,7 +30,9 @@ class DeparmtmentResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 

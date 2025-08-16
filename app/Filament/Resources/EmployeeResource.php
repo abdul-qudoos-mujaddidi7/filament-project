@@ -23,31 +23,23 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')
+                Forms\Components\Section::make('User Information')
+                ->description('Please Enter your details')
+                    ->schema([
+                        Forms\Components\TextInput::make('first_name')
                     ->required(),
                 Forms\Components\TextInput::make('last_name')
                     ->required(),
-                Forms\Components\TextInput::make('adress')
-                    ->required(),
+                Forms\Components\TextInput::make('adress')->required()
+                    ]),
                 Forms\Components\TextInput::make('zip_code')
                     ->required(),
                 Forms\Components\DatePicker::make('birth_date')
                     ->required(),
                 Forms\Components\DatePicker::make('hire_date')
                     ->required(),
-                Forms\Components\TextInput::make('department_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('city_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('state_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('country_id')
-                    ->required()
-                    ->numeric(),
-            ]);
+                
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table

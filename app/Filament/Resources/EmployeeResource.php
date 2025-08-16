@@ -30,16 +30,28 @@ class EmployeeResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('last_name')
                     ->required(),
-                Forms\Components\TextInput::make('adress')->required()
-                    ]),
-                Forms\Components\TextInput::make('zip_code')
-                    ->required(),
-                Forms\Components\DatePicker::make('birth_date')
-                    ->required(),
-                Forms\Components\DatePicker::make('hire_date')
-                    ->required(),
+               
+                    ])->columns(2),
+                    Forms\Components\Section::make('Address Information')
+                    ->description('Please Enter your address details')
+                    ->schema([
+                        Forms\Components\TextInput::make('adress')
+                            ->required(),
+                        Forms\Components\TextInput::make('zip_code')
+                            ->required(),
+                    ])->columns(2),
+
+                    Forms\Components\Section::make('Employment Details')
+                    ->description('Please Enter your employment details')
+                    ->schema([
+                        Forms\Components\DatePicker::make('birth_date')
+                            ->required(),
+                        Forms\Components\DatePicker::make('hire_date')
+                            ->required(),
+                    ])->columns(2),
+              
                 
-            ])->columns(3);
+            ]);
     }
 
     public static function table(Table $table): Table

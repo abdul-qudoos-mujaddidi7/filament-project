@@ -47,8 +47,16 @@ class StateResource extends Resource
     {
         return $table
             ->columns([
-               
+
+                    TextColumn::make("country.name")
+                    ->sortable()
+                    ->searchable(isIndividual:true, isGlobal:false),
+                    // ->toggleable(isToggledHiddenByDefault:true),
                     TextColumn::make("name")
+                    ->sortable()
+                    ->searchable(isIndividual:true)
+                    ->label('State Name')
+                    ->hidden(!auth()->user()->email === 'admin@admin.com' ), // Hide for non-admin users
             ])
             ->filters([
                 //

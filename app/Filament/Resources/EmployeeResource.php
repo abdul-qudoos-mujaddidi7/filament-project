@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmployeeResource\Pages;
-use App\Filament\Resources\EmployeeResource\RelationManagers;
 use App\Models\City;
 use App\Models\Employee;
 use App\Models\State;
@@ -14,10 +13,6 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
@@ -51,9 +46,13 @@ class EmployeeResource extends Resource
                     ->description('Please Enter your employment details')
                     ->schema([
                         Forms\Components\DatePicker::make('birth_date')
-                            ->required(),
+                            ->required()
+                            ->native(false)
+                            ->displayFormat('m-d-Y'),
                         Forms\Components\DatePicker::make('hire_date')
-                            ->required(),
+                            ->required()
+                            ->native(false)
+                            ->displayFormat('m-d-Y'),
                     ])->columns(2),
 
                     Forms\Components\Section::make('Department and Location')
@@ -97,7 +96,6 @@ Forms\Components\Select::make('city_id')
             : []
     )
     ->live()
-    ->afterStateUpdated(fn(Set $set) => $set('state_id',null))
     ->required()
     ->searchable()
     ->preload()

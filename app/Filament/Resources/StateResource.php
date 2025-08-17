@@ -50,19 +50,20 @@ class StateResource extends Resource
 
                     TextColumn::make("country.name")
                     ->sortable()
-                    ->searchable(isIndividual:true, isGlobal:false),
+                    ->searchable(),
                     // ->toggleable(isToggledHiddenByDefault:true),
                     TextColumn::make("name")
                     ->sortable()
-                    ->searchable(isIndividual:true)
+                    ->searchable()
                     ->label('State Name')
-                    ->hidden(!auth()->user()->email === 'admin@admin.com' ), // Hide for non-admin users
+                    // ->hidden(!auth()->user()->email === 'admin@admin.com' ),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -12,6 +12,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 class EmployeeResource extends Resource
 {
@@ -119,32 +120,26 @@ Forms\Components\Select::make('city_id')
     {
         return $table
             ->columns([
+                 TextColumn::make("country.name")
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('first_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('last_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('adress')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('zip_code')
-                    ->searchable(),
+                    
+               
                 Tables\Columns\TextColumn::make('birth_date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('hire_date')
                     ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('department_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('city_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('state_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('country_id')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    
+                
                
             ])
             ->filters([

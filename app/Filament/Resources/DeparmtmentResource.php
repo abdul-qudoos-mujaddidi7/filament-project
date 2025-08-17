@@ -11,6 +11,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -30,6 +31,7 @@ class DeparmtmentResource extends Resource
     {
         return $form
             ->schema([
+                
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -40,7 +42,11 @@ class DeparmtmentResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                    TextColumn::make('employees_count')
+                    ->counts('employees')
             ])
             ->filters([
                 //

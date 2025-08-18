@@ -31,6 +31,16 @@ class DeparmtmentResource extends Resource
     protected static ?string $modelLab = 'Departments';
     protected static ?int $navigationSort = 4;
 
+
+    public static function getNavigationBadge(): string{
+        return (string) Deparmtment::count();
+    }
+
+    public static function getNavigationBadgeColor(): string
+    {
+        return 'warning'; 
+    }
+
     public static function form(Form $form): Form
     {
         return $form

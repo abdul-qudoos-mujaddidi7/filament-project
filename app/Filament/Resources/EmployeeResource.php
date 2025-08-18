@@ -24,6 +24,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
@@ -31,6 +32,38 @@ class EmployeeResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     protected static ?string $navigationGroup = 'Employee Management';
+
+    
+
+    protected static ? string $recordTitleAttribute = 'first_name';
+
+     public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->first_name . ' ' . $record->last_name;
+    }
+
+       public static function getGloballySearchableAttributes(): array
+    {
+        return ['first_name', 'last_name', 'adress', 'birth_date', 'hire_date'];
+    }
+
+    public static function getGlobalSearchResultDescription(Model $record): array{
+        return [
+            'Address' => $record->adress,
+            'Birth Date' => $record->birth_date,
+            'Hire Date' => $record->hire_date,
+        ];
+    }
+
+
+    public static function getNavigationBadge(): string{
+        return (string) Employee::count();
+    }
+
+
+
+
+   
 
     public static function form(Form $form): Form
     {
@@ -112,7 +145,7 @@ Forms\Components\Select::make('city_id')
     ->preload()
     ->native(true),
                         Forms\Components\Select::make('department_id')
-                            ->relationship('department', 'name')
+                            ->relationship('deparmtment', 'name')
                             ->required()
                             ->searchable()
                             ->preload()

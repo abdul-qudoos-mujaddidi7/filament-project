@@ -1,71 +1,41 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\App\Resources;
 
-use App\Filament\Resources\EmployeeResource\Pages;
+use App\Filament\App\Resources\EmployeeResource\Pages;
+use App\Filament\App\Resources\EmployeeResource\RelationManagers;
 use App\Models\City;
 use App\Models\Employee;
 use App\Models\State;
+use Filament\Facades\Filament;
 use Filament\Forms;
-
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
-    protected static ?string $navigationGroup = 'Employee Management';
-
-    
-
-    protected static ? string $recordTitleAttribute = 'first_name';
-
-     public static function getGlobalSearchResultTitle(Model $record): string
-    {
-        return $record->first_name . ' ' . $record->last_name;
-    }
-
-       public static function getGloballySearchableAttributes(): array
-    {
-        return ['first_name', 'last_name', 'adress', 'birth_date', 'hire_date'];
-    }
-
-    public static function getGlobalSearchResultDescription(Model $record): array{
-        return [
-            'Address' => $record->adress,
-            'Birth Date' => $record->birth_date,
-            'Hire Date' => $record->hire_date,
-        ];
-    }
-
-
-    public static function getNavigationBadge(): string{
-        return (string) Employee::count();
-    }
-
-   
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                
                 Forms\Components\Section::make('User Information')
                 ->description('Please Enter your details')
                     ->schema([
@@ -142,7 +112,9 @@ Forms\Components\Select::make('city_id')
     ->preload()
     ->native(true),
                         Forms\Components\Select::make('department_id')
-                            ->relationship('deparmtment', 'name')
+                            ->relationship('deparmtment', 
+                            'name',
+                            modifyQueryUsing:fn(Builder $query)=>$query->whereBelongsTo(Filament::getTenant()))
                             ->required()
                             ->searchable()
                             ->preload()
@@ -154,13 +126,14 @@ Forms\Components\Select::make('city_id')
               
                 
             ]);
+                
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                 TextColumn::make("country.name")
+                TextColumn::make("country.name")
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('first_name')
@@ -179,8 +152,6 @@ Forms\Components\Select::make('city_id')
                     ->date()
                     ->sortable()
                     
-                
-               
             ])
             ->filters([
                 SelectFilter::make("Filter By Department")
@@ -206,16 +177,17 @@ Forms\Components\Select::make('city_id')
                         );
                 })//->columnSpan(2)->columns(2)
             ])//layout:FiltersLayout::AboveContent)->filtersFormColumns(3)
-                        ->actions([
-                            Tables\Actions\ViewAction::make(),
-                            Tables\Actions\EditAction::make(),
-                        ])
-                        ->bulkActions([
-                            Tables\Actions\BulkActionGroup::make([
-                                Tables\Actions\DeleteBulkAction::make(),
-                            ]),
-                        ]);
-                }
+            
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
 
     public  static function Infolist(Infolist $infolist): Infolist
     {
@@ -256,6 +228,7 @@ Forms\Components\Select::make('city_id')
             ]);
     }
 
+
     public static function getRelations(): array
     {
         return [
@@ -268,7 +241,6 @@ Forms\Components\Select::make('city_id')
         return [
             'index' => Pages\ListEmployees::route('/'),
             'create' => Pages\CreateEmployee::route('/create'),
-            'view' => Pages\ViewEmployee::route('/{record}'),
             'edit' => Pages\EditEmployee::route('/{record}/edit'),
         ];
     }

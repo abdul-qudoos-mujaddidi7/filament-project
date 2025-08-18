@@ -13,5 +13,11 @@ class Deparmtment extends Model
         return $this->hasMany(Employee::class);
     }
 
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+        // Defines a relationship with the Team model.
+    }
+
     
 }

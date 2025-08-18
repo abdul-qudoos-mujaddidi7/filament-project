@@ -19,10 +19,11 @@ return new class extends Migration
            
             $table->date('birth_date');
             $table->date('hire_date');
-            $table->foreignId('department_id')->constrained('departments')->onDelete('cascade');
+            $table->foreignId('deparmtment_id')->constrained('deparmtments')->onDelete('cascade');
             $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->foreignId('state_id')->constrained('states')->onDelete('cascade');
             $table->foreignId('country_id')->constrained('countries')->onDelete('cascade');
+            $table->foreignId('team_id')->constrained('teams')->onDelete('cascade');
             $table->timestamps();
         });
     }

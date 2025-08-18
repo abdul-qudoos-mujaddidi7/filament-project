@@ -20,6 +20,10 @@ class CountryResource extends Resource
 {
     protected static ?string $model = Country::class;
 
+    public static ?string $tenantOwnershipRelationshipName = null;
+
+
+
     protected static ?string $navigationIcon = 'heroicon-o-flag';
 
     protected static ?string $navigationGroup = 'System Settings';

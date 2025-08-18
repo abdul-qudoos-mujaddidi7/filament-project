@@ -7,13 +7,23 @@ use App\Models\City;
 use App\Models\Employee;
 use App\Models\State;
 use Filament\Forms;
+
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
@@ -143,16 +153,76 @@ Forms\Components\Select::make('city_id')
                
             ])
             ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                SelectFilter::make("Filter By Department")
+                    ->relationship('deparmtment', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload()
+                    ->indicator('Department'),
+                    Filter::make('created_at')
+                    ->form([
+                    DatePicker::make('created_from')->native(false),
+                    DatePicker::make('created_until')->native(false),
+                ])
+                ->query(function (Builder $query, array $data): Builder {
+                    return $query
+                        ->when(
+                            $data['created_from'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                        )
+                        ->when(
+                            $data['created_until'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                        );
+                })//->columnSpan(2)->columns(2)
+            ])//layout:FiltersLayout::AboveContent)->filtersFormColumns(3)
+                        ->actions([
+                            Tables\Actions\ViewAction::make(),
+                            Tables\Actions\EditAction::make(),
+                        ])
+                        ->bulkActions([
+                            Tables\Actions\BulkActionGroup::make([
+                                Tables\Actions\DeleteBulkAction::make(),
+                            ]),
+                        ]);
+                }
+
+    public  static function Infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('USer Details')
+                    ->schema([
+                        TextEntry::make('first_name')
+                            ->label('First Name'),
+                        TextEntry::make('last_name')
+                            ->label('Last Name'),
+                    ])->columns(2),
+                Section::make('Address Details')
+                    ->schema([
+
+                        TextEntry::make('adress')
+                            ->label('Address'),
+                    ]),
+                Section::make('Employment Details')
+                    ->schema([
+
+                        TextEntry::make('birth_date')
+                            ->label('Birth Date'),
+                        TextEntry::make('hire_date')
+                            ->label('Hire Date'),
+                    ])->columns(2),
+                Section::make('Department and Location')
+                    ->schema([
+                        TextEntry::make('country.name')
+                            ->label('Country'),
+                        TextEntry::make('state.name')
+                            ->label('State'),
+                        TextEntry::make('city.name')
+                            ->label('City'),
+                        TextEntry::make('deparmtment.name')
+                            ->label('Department'),
+                    ])->columns(2),
             ]);
     }
 

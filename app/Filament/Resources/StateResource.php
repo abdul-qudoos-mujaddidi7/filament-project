@@ -7,6 +7,9 @@ use App\Filament\Resources\StateResource\RelationManagers;
 use App\Models\State;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -56,7 +59,9 @@ class StateResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->label('State Name')
-                    // ->hidden(!auth()->user()->email === 'admin@admin.com' ),
+                    // ->hidden(!auth()->user()->email === '
+                    // 
+                    // @admin.com' ),
             ])
             ->filters([
                 //
@@ -71,6 +76,24 @@ class StateResource extends Resource
                 ]),
             ]);
     }
+
+    public  static function Infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('State Details')
+                    ->columns(2)
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('State Name'),
+                        TextEntry::make('country.name')
+                            ->label('Country'),
+                    ]),
+            ]);
+                
+               
+    }
+    
 
     public static function getRelations(): array
     {

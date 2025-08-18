@@ -9,11 +9,15 @@ use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DeparmtmentResource extends Resource
@@ -59,6 +63,24 @@ class DeparmtmentResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ]);
+    }
+
+    public  static function Infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('State Details')
+                    ->schema([
+                        TextEntry::make('name')
+                            ->label('Department Name'),
+                        TextEntry::make('employees_count')
+                        ->state(function (Model $record) {
+                            return $record->employees->count();
+                        })
+                        
+                    ])->columns(2)
+                   
             ]);
     }
 

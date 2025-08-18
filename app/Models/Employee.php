@@ -12,13 +12,13 @@ class Employee extends Model
         'adress',
         'birth_date',
         'hire_date',
-        'department_id',
+        'deparmtment_id',
         'state_id',
         "city_id",
         "country_id"
     ];
 
-    public function department()
+    public function deparmtment()
     {
         return $this->belongsTo(Deparmtment::class);
     }

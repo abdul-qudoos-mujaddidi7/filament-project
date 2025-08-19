@@ -47,6 +47,12 @@ class User extends Authenticatable implements HasTenants
         // Checks if a user can access a specific tenant/team.
     }
 
+    public function isAdmin() :bool{
+
+        return $this->email ==="admin@admin.com";
+
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -69,4 +75,7 @@ class User extends Authenticatable implements HasTenants
             'password' => 'hashed',
         ];
     }
+
+
+
 }

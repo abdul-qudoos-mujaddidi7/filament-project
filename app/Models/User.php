@@ -26,6 +26,7 @@ class User extends Authenticatable implements HasTenants
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
      public function teams(): BelongsToMany
@@ -73,6 +74,7 @@ class User extends Authenticatable implements HasTenants
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
         ];
     }
 
